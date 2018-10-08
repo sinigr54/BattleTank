@@ -21,7 +21,7 @@ protected:
 
 private:
 
-    ATank *GetControllingTank() const;
+    ATank *GetControlledTank() const;
 
     ATank *GetPlayerTank() const;
 };
