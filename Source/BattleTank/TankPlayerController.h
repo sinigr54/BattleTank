@@ -35,7 +35,7 @@ private:
     UPROPERTY(EditAnywhere)
     float LineTraceRange{1000000.0f};
 
-    bool GetSightHitLocation(FVector &hitLocation) const;
+    bool GetSightRayHitLocation(FVector &hitLocation) const;
 
     bool GetLookDirection(const FVector2D &screenLocation, FVector &lookDirection) const;
 

@@ -4,12 +4,13 @@
 #include "TankBarrel.h"
 #include "Classes/Kismet/GameplayStatics.h"
 #include "Components/StaticMeshComponent.h"
+#include "Engine/World.h"
 
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent() {
     // Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
     // off to improve performance if you don't need them.
-    PrimaryComponentTick.bCanEverTick = true;
+    PrimaryComponentTick.bCanEverTick = false;
 }
 
 void UTankAimingComponent::SetBarrel(UTankBarrel *barrel) {
@@ -39,10 +40,15 @@ void UTankAimingComponent::AimAt(const FVector &worldSpaceAim, float launchSpeed
 
     if (bHaveAimSolution) {
         auto aimDirection = outLaunchVelocity.GetSafeNormal();
-        auto tankName = GetOwner()->GetName();
-        UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s"), *tankName, *aimDirection.ToString());
 
         MoveBarrelTowards(aimDirection);
+
+        auto time = GetWorld()->GetTimeSeconds();
+        UE_LOG(LogTemp, Warning, TEXT("%f: Aim solution found"), time);
+
+    } else {
+        auto time = GetWorld()->GetTimeSeconds();
+        UE_LOG(LogTemp, Warning, TEXT("%f: No aim solution found"), time);
     }
 
 }
@@ -53,6 +59,6 @@ void UTankAimingComponent::MoveBarrelTowards(const FVector &aimDirection) {
     auto aimAsRotator = aimDirection.Rotation();
     auto deltaRotator = aimAsRotator - barrelRotator;
 
-    barrel->Elevate(5);
+    barrel->Elevate(deltaRotator.Pitch);
 }
 
