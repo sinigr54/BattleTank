@@ -2,6 +2,7 @@
 
 #include "TankAimingComponent.h"
 #include "TankBarrel.h"
+#include "TankTurret.h"
 #include "Classes/Kismet/GameplayStatics.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/World.h"
@@ -17,8 +18,12 @@ void UTankAimingComponent::SetBarrel(UTankBarrel *barrel) {
     UTankAimingComponent::barrel = barrel;
 }
 
+void UTankAimingComponent::SetTurret(UTankTurret *turret) {
+    UTankAimingComponent::turret = turret;
+}
+
 void UTankAimingComponent::AimAt(const FVector &worldSpaceAim, float launchSpeed) {
-    if (barrel == nullptr) {
+    if (barrel == nullptr || turret == nullptr) {
         return;
     }
 
@@ -54,11 +59,17 @@ void UTankAimingComponent::AimAt(const FVector &worldSpaceAim, float launchSpeed
 }
 
 void UTankAimingComponent::MoveBarrelTowards(const FVector &aimDirection) {
+    auto aimAsRotator = aimDirection.Rotation();
+
     // Calculate angle between barrel rotation and aim direction
     auto barrelRotator = barrel->GetForwardVector().Rotation();
-    auto aimAsRotator = aimDirection.Rotation();
-    auto deltaRotator = aimAsRotator - barrelRotator;
+    auto deltaBarrelRotator = aimAsRotator - barrelRotator;
 
-    barrel->Elevate(deltaRotator.Pitch);
+    barrel->Elevate(deltaBarrelRotator.Pitch);
+    if (FMath::Abs(deltaBarrelRotator.Yaw) < 180) {
+        turret->Rotate(deltaBarrelRotator.Yaw);
+    } else {
+        turret->Rotate(-deltaBarrelRotator.Yaw);
+    }
 }
 

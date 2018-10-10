@@ -8,6 +8,8 @@
 
 class UTankBarrel;
 
+class UTankTurret;
+
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 
 class BATTLETANK_API UTankAimingComponent : public UActorComponent {
@@ -21,9 +23,13 @@ public:
 
     void SetBarrel(UTankBarrel *barrel);
 
+    void SetTurret(UTankTurret *turret);
+
 private:
 
     UTankBarrel *barrel{nullptr};
+
+    UTankTurret *turret{nullptr};
 
     void MoveBarrelTowards(const FVector &aimDirection);
 };
