@@ -35,8 +35,6 @@ protected:
     void BeginPlay() override;
 
 public:
-    // Called every frame
-    void Tick(float DeltaTime) override;
 
     // Called to bind functionality to input
     void SetupPlayerInputComponent(class UInputComponent *PlayerInputComponent) override;

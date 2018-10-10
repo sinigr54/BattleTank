@@ -10,13 +10,12 @@
  * Holds barrel properties and Elevate method
  */
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
-
 class BATTLETANK_API UTankBarrel : public UStaticMeshComponent {
     GENERATED_BODY()
 
 public:
 
-    void Elevate(float degreesPerSecond);
+    void Elevate(float relativeSpeed);
 
 private:
 
