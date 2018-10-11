@@ -20,28 +20,29 @@ public:
     UPROPERTY(EditAnywhere, Category = "Firing")
     float LaunchSpeed{4000.0f}; // 4 m / s
 
-    // Sets default values for this pawn's properties
-    ATank();
+    // Called to bind functionality to input
+    void SetupPlayerInputComponent(class UInputComponent *PlayerInputComponent) override;
 
-    void AimAt(const FVector &hitLocation);
+    UFUNCTION(BlueprintCallable, Category = "Firing")
+
+    void Fire();
 
     UFUNCTION(BlueprintCallable, Category = "Setup")
     void SetBarrel(UTankBarrel *barrel);
 
     UFUNCTION(BlueprintCallable, Category = "Setup")
-
     void SetTurret(UTankTurret *turret);
 
-protected:
+    void AimAt(const FVector &hitLocation);
 
+protected:
     UTankAimingComponent *tankAimingComponent{nullptr};
 
     // Called when the game starts or when spawned
     void BeginPlay() override;
 
-public:
-
-    // Called to bind functionality to input
-    void SetupPlayerInputComponent(class UInputComponent *PlayerInputComponent) override;
+private:
+    // Sets default values for this pawn's properties
+    ATank();
 
 };
