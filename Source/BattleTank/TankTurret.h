@@ -16,7 +16,7 @@ class BATTLETANK_API UTankTurret : public UStaticMeshComponent {
 
 public:
 
-    inline void Rotate(float relativeSpeed);
+    void Rotate(float relativeSpeed);
 
 private:
 

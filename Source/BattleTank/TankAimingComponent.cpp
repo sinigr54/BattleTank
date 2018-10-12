@@ -14,29 +14,29 @@ UTankAimingComponent::UTankAimingComponent() {
     PrimaryComponentTick.bCanEverTick = false;
 }
 
-void UTankAimingComponent::SetBarrel(UTankBarrel *barrel) {
-    UTankAimingComponent::barrel = barrel;
+void UTankAimingComponent::SetBarrel(UTankBarrel *Barrel) {
+    UTankAimingComponent::Barrel = Barrel;
 }
 
-void UTankAimingComponent::SetTurret(UTankTurret *turret) {
-    UTankAimingComponent::turret = turret;
+void UTankAimingComponent::SetTurret(UTankTurret *Turret) {
+    UTankAimingComponent::Turret = Turret;
 }
 
-void UTankAimingComponent::AimAt(const FVector &worldSpaceAim, float launchSpeed) {
-    if (barrel == nullptr || turret == nullptr) {
+void UTankAimingComponent::AimAt(const FVector &WorldSpaceAim, float LaunchSpeed) {
+    if (Barrel == nullptr || Turret == nullptr) {
         return;
     }
 
-    FVector outLaunchVelocity;
-    const FVector &startLocation = barrel->GetSocketLocation(FName("Projectile"));
+    FVector OutLaunchVelocity;
+    const FVector &StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
 
     // Calculate out launch velocity
     bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(
             this,
-            outLaunchVelocity,
-            startLocation,
-            worldSpaceAim,
-            launchSpeed,
+            OutLaunchVelocity,
+            StartLocation,
+            WorldSpaceAim,
+            LaunchSpeed,
             false,
             0.0f,
             0.0f,
@@ -44,25 +44,25 @@ void UTankAimingComponent::AimAt(const FVector &worldSpaceAim, float launchSpeed
     );
 
     if (bHaveAimSolution) {
-        auto aimDirection = outLaunchVelocity.GetSafeNormal();
+        auto AimDirection = OutLaunchVelocity.GetSafeNormal();
 
-        MoveBarrelTowards(aimDirection);
+        MoveBarrelTowards(AimDirection);
     }
 
 }
 
-void UTankAimingComponent::MoveBarrelTowards(const FVector &aimDirection) {
-    auto aimAsRotator = aimDirection.Rotation();
+void UTankAimingComponent::MoveBarrelTowards(const FVector &AimDirection) {
+    auto AimAsRotator = AimDirection.Rotation();
 
     // Calculate angle between barrel rotation and aim direction
-    auto barrelRotator = barrel->GetForwardVector().Rotation();
-    auto deltaBarrelRotator = aimAsRotator - barrelRotator;
+    auto BarrelRotator = Barrel->GetForwardVector().Rotation();
+    auto DeltaBarrelRotator = AimAsRotator - BarrelRotator;
 
-    barrel->Elevate(deltaBarrelRotator.Pitch);
-    if (FMath::Abs(deltaBarrelRotator.Yaw) < 180) {
-        turret->Rotate(deltaBarrelRotator.Yaw);
+    Barrel->Elevate(DeltaBarrelRotator.Pitch);
+    if (FMath::Abs(DeltaBarrelRotator.Yaw) < 180) {
+        Turret->Rotate(DeltaBarrelRotator.Yaw);
     } else {
-        turret->Rotate(-deltaBarrelRotator.Yaw);
+        Turret->Rotate(-DeltaBarrelRotator.Yaw);
     }
 }
 
