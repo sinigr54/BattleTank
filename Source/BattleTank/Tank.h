@@ -43,10 +43,10 @@ protected:
     void BeginPlay() override;
 
 private:
-    UPROPERTY(EditAnywhere, Category = "Setup")
+    UPROPERTY(EditDefaultsOnly, Category = "Setup")
     TSubclassOf<AProjectile> ProjectileBlueprint;
 
-    UPROPERTY(EditAnywhere, Category = "Firing")
+    UPROPERTY(EditDefaultsOnly, Category = "Firing")
     float LaunchSpeed{4000.0f}; // 4 m / s
 
     UPROPERTY(EditDefaultsOnly, Category = "Firing")
