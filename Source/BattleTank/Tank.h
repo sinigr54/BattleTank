@@ -8,6 +8,8 @@
 
 class UTankAimingComponent;
 
+class UTankMovementComponent;
+
 class UTankBarrel;
 
 class UTankTurret;
@@ -23,21 +25,21 @@ public:
     void SetupPlayerInputComponent(class UInputComponent *PlayerInputComponent) override;
 
     UFUNCTION(BlueprintCallable, Category = "Firing")
-
     void Fire();
 
     UFUNCTION(BlueprintCallable, Category = "Setup")
-
     void SetBarrel(UTankBarrel *Barrel);
 
     UFUNCTION(BlueprintCallable, Category = "Setup")
-
     void SetTurret(UTankTurret *Turret);
 
     void AimAt(const FVector &HitLocation);
 
 protected:
     UTankAimingComponent *TankAimingComponent{nullptr};
+
+    UPROPERTY(BlueprintReadOnly, Category = "Movement")
+    UTankMovementComponent *TankMovementComponent{nullptr};
 
     // Called when the game starts or when spawned
     void BeginPlay() override;
