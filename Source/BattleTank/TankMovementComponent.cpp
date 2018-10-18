@@ -18,3 +18,10 @@ void UTankMovementComponent::IntendMoveForward(float Throw) {
     LeftTrack->SetThrottle(Throw);
     RightTrack->SetThrottle(Throw);
 }
+
+void UTankMovementComponent::IntendTurnRight(float Throw) {
+    UE_LOG(LogTemp, Warning, TEXT("Intend move forward throw: %f"), Throw);
+
+    LeftTrack->SetThrottle(Throw);
+    RightTrack->SetThrottle(-Throw);
+}
