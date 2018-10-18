@@ -8,8 +8,6 @@
 
 class UTankAimingComponent;
 
-class UTankMovementComponent;
-
 class UTankBarrel;
 
 class UTankTurret;
@@ -37,9 +35,6 @@ public:
 
 protected:
     UTankAimingComponent *TankAimingComponent{nullptr};
-
-    UPROPERTY(BlueprintReadOnly, Category = "Movement")
-    UTankMovementComponent *TankMovementComponent{nullptr};
 
     // Called when the game starts or when spawned
     void BeginPlay() override;
