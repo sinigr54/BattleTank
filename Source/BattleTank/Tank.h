@@ -34,6 +34,7 @@ public:
     void AimAt(const FVector &HitLocation);
 
 protected:
+    UPROPERTY(BlueprintReadOnly, Category = "Setup")
     UTankAimingComponent *TankAimingComponent{nullptr};
 
     // Called when the game starts or when spawned
