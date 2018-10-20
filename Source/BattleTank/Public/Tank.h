@@ -10,12 +10,7 @@ UCLASS()
 class BATTLETANK_API ATank : public APawn {
     GENERATED_BODY()
 
-protected:
-    // Called when the game starts or when spawned
-    void BeginPlay() override;
-
 private:
-
     // Sets default values for this pawn's properties
     ATank();
 
