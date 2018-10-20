@@ -37,7 +37,11 @@ public:
 
 protected:
     UPROPERTY(BlueprintReadOnly, Category = "State")
-    EFiringStatus FiringStatus{EFiringStatus::Locked};
+    EFiringStatus FiringStatus{EFiringStatus::Reloading};
+
+    void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
+
+    void BeginPlay() override;
 
 private:
     UPROPERTY(EditDefaultsOnly, Category = "Setup")
@@ -51,9 +55,13 @@ private:
 
     double LastFireTime{0};
 
+    FVector AimDirection;
+
     UTankBarrel *Barrel{nullptr};
 
     UTankTurret *Turret{nullptr};
 
     void MoveBarrelTowards(const FVector &AimDirection);
+
+    bool IsBarrelMoving() const;
 };

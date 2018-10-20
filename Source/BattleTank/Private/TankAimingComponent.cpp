@@ -12,7 +12,26 @@
 UTankAimingComponent::UTankAimingComponent() {
     // Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
     // off to improve performance if you don't need them.
-    PrimaryComponentTick.bCanEverTick = false;
+    PrimaryComponentTick.bCanEverTick = true;
+}
+
+void UTankAimingComponent::BeginPlay() {
+    UActorComponent::BeginPlay();
+
+    LastFireTime = FPlatformTime::Seconds();
+}
+
+void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickType,
+                                         FActorComponentTickFunction *ThisTickFunction) {
+    Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+    if ((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSeconds) {
+        FiringStatus = EFiringStatus::Reloading;
+    } else if (IsBarrelMoving()) {
+        FiringStatus = EFiringStatus::Aiming;
+    } else {
+        FiringStatus = EFiringStatus::Locked;
+    }
 }
 
 void UTankAimingComponent::Initialize(UTankBarrel *BarrelToSet, UTankTurret *TurretToSet) {
@@ -22,9 +41,7 @@ void UTankAimingComponent::Initialize(UTankBarrel *BarrelToSet, UTankTurret *Tur
 
 void UTankAimingComponent::Fire() {
     if (ensure(ProjectileBlueprint.Get() != nullptr)) {
-        bool bIsReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
-
-        if (bIsReloaded) {
+        if (FiringStatus == EFiringStatus::Locked) {
             auto Projectile = GetWorld()->SpawnActor<AProjectile>(
                     ProjectileBlueprint,
                     Barrel->GetSocketLocation(FName("Projectile")),
@@ -57,7 +74,7 @@ void UTankAimingComponent::AimAt(const FVector &WorldSpaceAim) {
         );
 
         if (bHaveAimSolution) {
-            auto AimDirection = OutLaunchVelocity.GetSafeNormal();
+            AimDirection = OutLaunchVelocity.GetSafeNormal();
 
             MoveBarrelTowards(AimDirection);
         }
@@ -79,3 +96,6 @@ void UTankAimingComponent::MoveBarrelTowards(const FVector &AimDirection) {
     }
 }
 
+bool UTankAimingComponent::IsBarrelMoving() const {
+    return FMath::Abs(AimDirection.Rotation().Yaw - Barrel->GetForwardVector().Rotation().Yaw) > 0.5f;
+}
