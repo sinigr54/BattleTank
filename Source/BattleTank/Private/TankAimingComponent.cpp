@@ -21,18 +21,20 @@ void UTankAimingComponent::Initialize(UTankBarrel *BarrelToSet, UTankTurret *Tur
 }
 
 void UTankAimingComponent::Fire() {
-    bool bIsReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
+    if (ensure(ProjectileBlueprint.Get() != nullptr)) {
+        bool bIsReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
 
-    if (bIsReloaded) {
-        auto Projectile = GetWorld()->SpawnActor<AProjectile>(
-                ProjectileBlueprint,
-                Barrel->GetSocketLocation(FName("Projectile")),
-                Barrel->GetSocketRotation(FName("Projectile"))
-        );
+        if (bIsReloaded) {
+            auto Projectile = GetWorld()->SpawnActor<AProjectile>(
+                    ProjectileBlueprint,
+                    Barrel->GetSocketLocation(FName("Projectile")),
+                    Barrel->GetSocketRotation(FName("Projectile"))
+            );
 
-        Projectile->LaunchProjectile(LaunchSpeed);
+            Projectile->LaunchProjectile(LaunchSpeed);
 
-        LastFireTime = FPlatformTime::Seconds();
+            LastFireTime = FPlatformTime::Seconds();
+        }
     }
 }
 
