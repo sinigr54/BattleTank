@@ -25,16 +25,9 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Firing")
     void Fire();
 
-    UFUNCTION(BlueprintCallable, Category = "Setup")
-    void SetBarrel(UTankBarrel *Barrel);
-
-    UFUNCTION(BlueprintCallable, Category = "Setup")
-    void SetTurret(UTankTurret *Turret);
-
     void AimAt(const FVector &HitLocation);
 
 protected:
-    UPROPERTY(BlueprintReadOnly, Category = "Setup")
     UTankAimingComponent *TankAimingComponent{nullptr};
 
     // Called when the game starts or when spawned
@@ -53,6 +46,8 @@ private:
     UTankBarrel *Barrel{nullptr};
 
     double LastFireTime{0};
+
+    const FString TAG{"ATank"};
 
     // Sets default values for this pawn's properties
     ATank();

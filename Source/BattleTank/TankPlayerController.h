@@ -8,6 +8,8 @@
 
 class ATank;
 
+class UTankAimingComponent;
+
 UCLASS()
 class BATTLETANK_API ATankPlayerController : public APlayerController {
     GENERATED_BODY()
@@ -15,13 +17,14 @@ class BATTLETANK_API ATankPlayerController : public APlayerController {
 public:
     void Tick(float DeltaSeconds) override;
 
-    UFUNCTION(BlueprintCallable, Category = "Setup")
-    ATank *GetControlledTank() const;
-
     void AimTowardsCrosshair();
 
 protected:
-    void BeginPlay() override;
+    UFUNCTION(BlueprintCallable, Category = "Setup")
+    ATank *GetControlledTank() const;
+
+    UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
+    void FoundAimingComponent(UTankAimingComponent *AimingComponent);
 
 private:
     UPROPERTY(EditDefaultsOnly)
@@ -32,6 +35,8 @@ private:
 
     UPROPERTY(EditDefaultsOnly)
     float LineTraceRange{1000000.0f};
+
+    void BeginPlay() override;
 
     bool GetSightRayHitLocation(FVector &HitLocation) const;
 

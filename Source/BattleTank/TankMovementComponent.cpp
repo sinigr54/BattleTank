@@ -4,22 +4,22 @@
 #include "TankTrack.h"
 
 void UTankMovementComponent::Initialize(UTankTrack *LeftTrack, UTankTrack *RightTrack) {
-    if (LeftTrack == nullptr || RightTrack == nullptr) {
-        return;
-    }
-
     this->LeftTrack = LeftTrack;
     this->RightTrack = RightTrack;
 }
 
 void UTankMovementComponent::IntendMoveForward(float Throw) {
-    LeftTrack->SetThrottle(Throw);
-    RightTrack->SetThrottle(Throw);
+    if (ensure(LeftTrack != nullptr && RightTrack != nullptr)) {
+        LeftTrack->SetThrottle(Throw);
+        RightTrack->SetThrottle(Throw);
+    }
 }
 
 void UTankMovementComponent::IntendTurnRight(float Throw) {
-    LeftTrack->SetThrottle(Throw);
-    RightTrack->SetThrottle(-Throw);
+    if (ensure(LeftTrack != nullptr && RightTrack != nullptr)) {
+        LeftTrack->SetThrottle(Throw);
+        RightTrack->SetThrottle(-Throw);
+    }
 }
 
 void UTankMovementComponent::RequestDirectMove(const FVector &MoveVelocity, bool bForceMaxSpeed) {

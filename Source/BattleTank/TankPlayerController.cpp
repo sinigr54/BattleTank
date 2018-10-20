@@ -2,19 +2,15 @@
 
 #include "TankPlayerController.h"
 #include "Tank.h"
+#include "TankAimingComponent.h"
 #include <Engine/World.h>
 
 void ATankPlayerController::BeginPlay() {
     Super::BeginPlay();
 
-    UE_LOG(LogTemp, Warning, TEXT("PlayerController Begin Play"))
-
-    auto ControlledTank = GetControlledTank();
-    if (ControlledTank == nullptr) {
-        UE_LOG(LogTemp, Warning, TEXT("PlayerController not possessing a tank"));
-    } else {
-        FString objectPosition = ControlledTank->GetActorLocation().ToString();
-        UE_LOG(LogTemp, Warning, TEXT("Player controlling tank is at: %s"), *objectPosition);
+    auto AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
+    if (ensure(AimingComponent != nullptr)) {
+        FoundAimingComponent(AimingComponent);
     }
 }
 
@@ -28,13 +24,11 @@ ATank *ATankPlayerController::GetControlledTank() const {
 }
 
 void ATankPlayerController::AimTowardsCrosshair() {
-    if (GetControlledTank() == nullptr) {
-        return;
-    }
-
-    FVector HitLocation{0.0f};
-    if (GetSightRayHitLocation(HitLocation)) {
-        GetControlledTank()->AimAt(HitLocation);
+    if (ensure(GetControlledTank() != nullptr)) {
+        FVector HitLocation{0.0f};
+        if (GetSightRayHitLocation(HitLocation)) {
+            GetControlledTank()->AimAt(HitLocation);
+        }
     }
 }
 

@@ -14,41 +14,35 @@ UTankAimingComponent::UTankAimingComponent() {
     PrimaryComponentTick.bCanEverTick = false;
 }
 
-void UTankAimingComponent::SetBarrel(UTankBarrel *Barrel) {
-    UTankAimingComponent::Barrel = Barrel;
-}
-
-void UTankAimingComponent::SetTurret(UTankTurret *Turret) {
-    UTankAimingComponent::Turret = Turret;
+void UTankAimingComponent::Initialize(UTankBarrel *BarrelToSet, UTankTurret *TurretToSet) {
+    UTankAimingComponent::Barrel = BarrelToSet;
+    UTankAimingComponent::Turret = TurretToSet;
 }
 
 void UTankAimingComponent::AimAt(const FVector &WorldSpaceAim, float LaunchSpeed) {
-    if (Barrel == nullptr || Turret == nullptr) {
-        return;
+    if (ensure(Barrel != nullptr && Turret != nullptr)) {
+        FVector OutLaunchVelocity;
+        const FVector &StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
+
+        // Calculate out launch velocity
+        bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(
+                this,
+                OutLaunchVelocity,
+                StartLocation,
+                WorldSpaceAim,
+                LaunchSpeed,
+                false,
+                0.0f,
+                0.0f,
+                ESuggestProjVelocityTraceOption::DoNotTrace
+        );
+
+        if (bHaveAimSolution) {
+            auto AimDirection = OutLaunchVelocity.GetSafeNormal();
+
+            MoveBarrelTowards(AimDirection);
+        }
     }
-
-    FVector OutLaunchVelocity;
-    const FVector &StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
-
-    // Calculate out launch velocity
-    bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(
-            this,
-            OutLaunchVelocity,
-            StartLocation,
-            WorldSpaceAim,
-            LaunchSpeed,
-            false,
-            0.0f,
-            0.0f,
-            ESuggestProjVelocityTraceOption::DoNotTrace
-    );
-
-    if (bHaveAimSolution) {
-        auto AimDirection = OutLaunchVelocity.GetSafeNormal();
-
-        MoveBarrelTowards(AimDirection);
-    }
-
 }
 
 void UTankAimingComponent::MoveBarrelTowards(const FVector &AimDirection) {
@@ -64,5 +58,13 @@ void UTankAimingComponent::MoveBarrelTowards(const FVector &AimDirection) {
     } else {
         Turret->Rotate(-DeltaBarrelRotator.Yaw);
     }
+}
+
+UTankBarrel *UTankAimingComponent::GetBarrel() const {
+    return Barrel;
+}
+
+UTankTurret *UTankAimingComponent::GetTurret() const {
+    return Turret;
 }
 
