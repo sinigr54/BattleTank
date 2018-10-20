@@ -1,8 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "BattleTank/Public/TankAimingComponent.h"
-#include "BattleTank/Public/TankBarrel.h"
-#include "BattleTank/Public/TankTurret.h"
+#include "TankAimingComponent.h"
+#include "TankBarrel.h"
+#include "TankTurret.h"
+#include "Projectile.h"
 #include "Classes/Kismet/GameplayStatics.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/World.h"
@@ -17,6 +18,22 @@ UTankAimingComponent::UTankAimingComponent() {
 void UTankAimingComponent::Initialize(UTankBarrel *BarrelToSet, UTankTurret *TurretToSet) {
     UTankAimingComponent::Barrel = BarrelToSet;
     UTankAimingComponent::Turret = TurretToSet;
+}
+
+void UTankAimingComponent::Fire() {
+    bool bIsReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
+
+    if (bIsReloaded) {
+        auto Projectile = GetWorld()->SpawnActor<AProjectile>(
+                ProjectileBlueprint,
+                Barrel->GetSocketLocation(FName("Projectile")),
+                Barrel->GetSocketRotation(FName("Projectile"))
+        );
+
+        Projectile->LaunchProjectile(LaunchSpeed);
+
+        LastFireTime = FPlatformTime::Seconds();
+    }
 }
 
 void UTankAimingComponent::AimAt(const FVector &WorldSpaceAim) {

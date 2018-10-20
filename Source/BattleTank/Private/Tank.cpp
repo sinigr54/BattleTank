@@ -14,18 +14,3 @@ void ATank::BeginPlay() {
     Super::BeginPlay();
 }
 
-void ATank::Fire() {
-    /*bool bIsReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
-
-    if (bIsReloaded) {
-        auto Projectile = GetWorld()->SpawnActor<AProjectile>(
-                ProjectileBlueprint,
-                TankAimingComponent->GetBarrel()->GetSocketLocation(FName("Projectile")),
-                TankAimingComponent->GetBarrel()->GetSocketRotation(FName("Projectile"))
-        );
-
-        Projectile->LaunchProjectile(LaunchSpeed);
-
-        LastFireTime = FPlatformTime::Seconds();
-    }*/
-}

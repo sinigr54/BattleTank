@@ -17,6 +17,8 @@ class UTankBarrel;
 
 class UTankTurret;
 
+class AProjectile;
+
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class BATTLETANK_API UTankAimingComponent : public UActorComponent {
     GENERATED_BODY()
@@ -24,6 +26,9 @@ class BATTLETANK_API UTankAimingComponent : public UActorComponent {
 public:
     // Sets default values for this component's properties
     UTankAimingComponent();
+
+    UFUNCTION(BlueprintCallable, Category = "Firing")
+    void Fire();
 
     UFUNCTION(BlueprintCallable, Category = "Setup")
     void Initialize(UTankBarrel *BarrelToSet, UTankTurret *TurretToSet);
@@ -36,7 +41,15 @@ protected:
 
 private:
     UPROPERTY(EditDefaultsOnly, Category = "Setup")
+    TSubclassOf<AProjectile> ProjectileBlueprint;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Setup")
     float LaunchSpeed{4000.0f}; // 4 m / s
+
+    UPROPERTY(EditDefaultsOnly, Category = "Firing")
+    float ReloadTimeInSeconds{3};
+
+    double LastFireTime{0};
 
     UTankBarrel *Barrel{nullptr};
 
