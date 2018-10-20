@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "TankAimingComponent.h"
-#include "TankBarrel.h"
-#include "TankTurret.h"
+#include "BattleTank/Public/TankAimingComponent.h"
+#include "BattleTank/Public/TankBarrel.h"
+#include "BattleTank/Public/TankTurret.h"
 #include "Classes/Kismet/GameplayStatics.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/World.h"

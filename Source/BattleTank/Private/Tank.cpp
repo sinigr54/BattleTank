@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Tank.h"
-#include "TankAimingComponent.h"
+#include "BattleTank/Public/Tank.h"
+#include "BattleTank/Public/TankAimingComponent.h"
 #include "Engine/World.h"
-#include "TankBarrel.h"
-#include "Projectile.h"
+#include "BattleTank/Public/TankBarrel.h"
+#include "BattleTank/Public/Projectile.h"
 
 // Sets default values
 ATank::ATank() {
