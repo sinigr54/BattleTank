@@ -74,9 +74,12 @@ void UTankAimingComponent::AimAt(const FVector &WorldSpaceAim) {
         );
 
         if (bHaveAimSolution) {
-            AimDirection = OutLaunchVelocity.GetSafeNormal();
+            auto NewAimLocation = OutLaunchVelocity;
 
-            MoveBarrelTowards(AimDirection);
+            if (!NewAimLocation.Equals(AimLocation, 0.5f)) {
+                AimLocation = NewAimLocation;
+                MoveBarrelTowards(AimLocation.GetSafeNormal());
+            }
         }
     }
 }
@@ -97,5 +100,5 @@ void UTankAimingComponent::MoveBarrelTowards(const FVector &AimDirection) {
 }
 
 bool UTankAimingComponent::IsBarrelMoving() const {
-    return FMath::Abs(AimDirection.Rotation().Yaw - Barrel->GetForwardVector().Rotation().Yaw) > 0.5f;
+    return FMath::Abs(AimLocation.Rotation().Yaw - Barrel->GetForwardVector().Rotation().Yaw) > 0.5f;
 }
