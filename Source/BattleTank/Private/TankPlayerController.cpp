@@ -1,16 +1,17 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "BattleTank/Public/TankPlayerController.h"
-#include "BattleTank/Public/Tank.h"
-#include "BattleTank/Public/TankAimingComponent.h"
+#include "TankPlayerController.h"
+#include "TankAimingComponent.h"
 #include <Engine/World.h>
+#include <BattleTank/Public/TankPlayerController.h>
+
 
 void ATankPlayerController::BeginPlay() {
     Super::BeginPlay();
 
-    auto AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
-    if (ensure(AimingComponent != nullptr)) {
-        FoundAimingComponent(AimingComponent);
+    TankAimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+    if (ensure(TankAimingComponent != nullptr)) {
+        FoundAimingComponent(TankAimingComponent);
     }
 }
 
@@ -19,15 +20,11 @@ void ATankPlayerController::Tick(float DeltaSeconds) {
     AimTowardsCrosshair();
 }
 
-ATank *ATankPlayerController::GetControlledTank() const {
-    return Cast<ATank>(GetPawn());
-}
-
 void ATankPlayerController::AimTowardsCrosshair() {
-    if (ensure(GetControlledTank() != nullptr)) {
+    if (ensure(GetPawn() != nullptr && TankAimingComponent != nullptr)) {
         FVector HitLocation{0.0f};
         if (GetSightRayHitLocation(HitLocation)) {
-            GetControlledTank()->AimAt(HitLocation);
+            TankAimingComponent->AimAt(HitLocation);
         }
     }
 }

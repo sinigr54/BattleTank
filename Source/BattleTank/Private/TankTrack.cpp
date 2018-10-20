@@ -1,7 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "BattleTank/Public/TankTrack.h"
-
+#include "TankTrack.h"
 
 void UTankTrack::SetThrottle(float Throttle) {
     auto ForceApplied = GetForwardVector() * Throttle * TrackMaxDrivingForce;

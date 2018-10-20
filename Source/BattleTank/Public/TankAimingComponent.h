@@ -28,17 +28,16 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Setup")
     void Initialize(UTankBarrel *BarrelToSet, UTankTurret *TurretToSet);
 
-    void AimAt(const FVector &WorldSpaceAim, float LaunchSpeed);
-
-    UTankBarrel *GetBarrel() const;
-
-    UTankTurret *GetTurret() const;
+    void AimAt(const FVector &WorldSpaceAim);
 
 protected:
     UPROPERTY(BlueprintReadOnly, Category = "State")
     EFiringStatus FiringStatus{EFiringStatus::Locked};
 
 private:
+    UPROPERTY(EditDefaultsOnly, Category = "Setup")
+    float LaunchSpeed{4000.0f}; // 4 m / s
+
     UTankBarrel *Barrel{nullptr};
 
     UTankTurret *Turret{nullptr};
