@@ -15,14 +15,13 @@ class BATTLETANK_API ATankAIController : public AAIController {
 protected:
     void BeginPlay() override;
 
-public:
     void Tick(float DeltaTime) override;
 
 private:
+    UPROPERTY(EditDefaultsOnly, Category = "Setup")
+    float AcceptanceRadius = 8000;
+
     UTankAimingComponent *TankAimingComponent{nullptr};
 
-    APawn *ControlledTank{nullptr};
     APawn *PlayerTank{nullptr};
-
-    float AcceptanceRadius = 3000;
 };

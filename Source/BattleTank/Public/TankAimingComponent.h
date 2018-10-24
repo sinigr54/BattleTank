@@ -35,9 +35,13 @@ public:
 
     void AimAt(const FVector &WorldSpaceAim);
 
+    EFiringStatus GetFiringStatus() const;
+
 protected:
     UPROPERTY(BlueprintReadOnly, Category = "State")
     EFiringStatus FiringStatus{EFiringStatus::Reloading};
+
+protected:
 
     void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
 

@@ -102,3 +102,7 @@ void UTankAimingComponent::MoveBarrelTowards(const FVector &AimDirection) {
 bool UTankAimingComponent::IsBarrelMoving() const {
     return FMath::Abs(AimLocation.Rotation().Yaw - Barrel->GetForwardVector().Rotation().Yaw) > 0.5f;
 }
+
+EFiringStatus UTankAimingComponent::GetFiringStatus() const {
+    return FiringStatus;
+}

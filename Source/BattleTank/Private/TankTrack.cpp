@@ -9,14 +9,12 @@ UTankTrack::UTankTrack() {
 void UTankTrack::BeginPlay() {
     UPrimitiveComponent::BeginPlay();
 
-     OnComponentHit.AddDynamic(this, &UTankTrack::OnHit);
+    OnComponentHit.AddDynamic(this, &UTankTrack::OnHit);
 }
 
-void UTankTrack::OnHit(UPrimitiveComponent *HitComponent, AActor *OtherActor, UPrimitiveComponent *OtherComp,
+void UTankTrack::OnHit(UPrimitiveComponent *HitComponent,
+                       AActor *OtherActor, UPrimitiveComponent *OtherComp,
                        FVector NormalImpulse, const FHitResult &Hit) {
-
-    auto ComponentName = GetName();
-    UE_LOG(LogTemp, Warning, TEXT("%s: OnComponentHit"), *ComponentName);
 
     DriveTrack();
     ApplySidewaysForce();
@@ -24,7 +22,7 @@ void UTankTrack::OnHit(UPrimitiveComponent *HitComponent, AActor *OtherActor, UP
 }
 
 void UTankTrack::SetThrottle(float Throttle) {
-    CurrentThrottle = FMath::Clamp<float>(CurrentThrottle + Throttle, -1.0, 1.0);
+    CurrentThrottle = FMath::Clamp<float>(CurrentThrottle + Throttle, -1.0f, 1.0f);
 }
 
 void UTankTrack::ApplySidewaysForce() {
