@@ -1,5 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#include <BattleTank/Public/TankAimingComponent.h>
+
 #include "TankAimingComponent.h"
 #include "TankBarrel.h"
 #include "TankTurret.h"
@@ -25,12 +27,14 @@ void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickTy
                                          FActorComponentTickFunction *ThisTickFunction) {
     Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-    if ((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSeconds) {
-        FiringStatus = EFiringStatus::Reloading;
-    } else if (IsBarrelMoving()) {
-        FiringStatus = EFiringStatus::Aiming;
-    } else {
-        FiringStatus = EFiringStatus::Locked;
+    if (FiringStatus != EFiringStatus::OutOfAmmo) {
+        if ((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSeconds) {
+            FiringStatus = EFiringStatus::Reloading;
+        } else if (IsBarrelMoving()) {
+            FiringStatus = EFiringStatus::Aiming;
+        } else {
+            FiringStatus = EFiringStatus::Locked;
+        }
     }
 }
 
@@ -51,6 +55,9 @@ void UTankAimingComponent::Fire() {
             Projectile->LaunchProjectile(LaunchSpeed);
 
             LastFireTime = FPlatformTime::Seconds();
+
+            --RoundsLeft;
+            SetFiringStatusOutOfAmmoIfNeed();
         }
     }
 }
@@ -105,4 +112,14 @@ bool UTankAimingComponent::IsBarrelMoving() const {
 
 EFiringStatus UTankAimingComponent::GetFiringStatus() const {
     return FiringStatus;
+}
+
+int UTankAimingComponent::GetRoundsLeft() const {
+    return RoundsLeft;
+}
+
+void UTankAimingComponent::SetFiringStatusOutOfAmmoIfNeed() {
+    if (RoundsLeft == 0) {
+        FiringStatus = EFiringStatus::OutOfAmmo;
+    }
 }

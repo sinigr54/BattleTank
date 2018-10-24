@@ -10,7 +10,8 @@ UENUM()
 enum class EFiringStatus : uint8 {
     Reloading,
     Aiming,
-    Locked
+    Locked,
+    OutOfAmmo
 };
 
 class UTankBarrel;
@@ -27,11 +28,14 @@ public:
     // Sets default values for this component's properties
     UTankAimingComponent();
 
+    UFUNCTION(BlueprintCallable, Category = "Setup")
+    void Initialize(UTankBarrel *BarrelToSet, UTankTurret *TurretToSet);
+
     UFUNCTION(BlueprintCallable, Category = "Firing")
     void Fire();
 
-    UFUNCTION(BlueprintCallable, Category = "Setup")
-    void Initialize(UTankBarrel *BarrelToSet, UTankTurret *TurretToSet);
+    UFUNCTION(BlueprintCallable, Category = "Firing")
+    int GetRoundsLeft() const;
 
     void AimAt(const FVector &WorldSpaceAim);
 
@@ -40,8 +44,6 @@ public:
 protected:
     UPROPERTY(BlueprintReadOnly, Category = "State")
     EFiringStatus FiringStatus{EFiringStatus::Reloading};
-
-protected:
 
     void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
 
@@ -65,7 +67,11 @@ private:
 
     UTankTurret *Turret{nullptr};
 
+    int RoundsLeft{3};
+
     void MoveBarrelTowards(const FVector &AimDirection);
 
     bool IsBarrelMoving() const;
+
+    void SetFiringStatusOutOfAmmoIfNeed();
 };
