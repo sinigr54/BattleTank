@@ -8,6 +8,10 @@
 
 class UProjectileMovementComponent;
 
+class UStaticMeshComponent;
+
+class UParticleSystemComponent;
+
 UCLASS()
 class BATTLETANK_API AProjectile : public AActor {
     GENERATED_BODY()
@@ -27,5 +31,11 @@ protected:
 
 private:
     UProjectileMovementComponent *ProjectileMovementComponent{nullptr};
+
+    UPROPERTY(VisibleAnywhere, Category = "Components")
+    UStaticMeshComponent *CollisionMesh{nullptr};
+
+    UPROPERTY(VisibleAnywhere, Category = "Components")
+    UParticleSystemComponent *LaunchBlast{nullptr};
 
 };

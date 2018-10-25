@@ -43,7 +43,7 @@ void UTankAimingComponent::Initialize(UTankBarrel *BarrelToSet, UTankTurret *Tur
 
 void UTankAimingComponent::Fire() {
     if (ensure(ProjectileBlueprint.Get() != nullptr)) {
-        if (FiringStatus == EFiringStatus::Locked) {
+        if (FiringStatus == EFiringStatus::Locked || FiringStatus == EFiringStatus::Aiming) {
             auto Projectile = GetWorld()->SpawnActor<AProjectile>(
                     ProjectileBlueprint,
                     Barrel->GetSocketLocation(FName("Projectile")),
