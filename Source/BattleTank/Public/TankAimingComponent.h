@@ -35,7 +35,7 @@ public:
     void Fire();
 
     UFUNCTION(BlueprintCallable, Category = "Firing")
-    int GetRoundsLeft() const;
+    int32 GetRoundsLeft() const;
 
     void AimAt(const FVector &WorldSpaceAim);
 
@@ -59,6 +59,9 @@ private:
     UPROPERTY(EditDefaultsOnly, Category = "Firing")
     float ReloadTimeInSeconds{3};
 
+    UPROPERTY(EditDefaultsOnly, Category = "Firing")
+    int32 RoundsLeft{3};
+
     double LastFireTime{0};
 
     FVector AimLocation;
@@ -66,8 +69,6 @@ private:
     UTankBarrel *Barrel{nullptr};
 
     UTankTurret *Turret{nullptr};
-
-    int RoundsLeft{3};
 
     void MoveBarrelTowards(const FVector &AimDirection);
 

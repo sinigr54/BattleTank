@@ -1,7 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include <BattleTank/Public/TankAimingComponent.h>
-
 #include "TankAimingComponent.h"
 #include "TankBarrel.h"
 #include "TankTurret.h"
@@ -114,7 +112,7 @@ EFiringStatus UTankAimingComponent::GetFiringStatus() const {
     return FiringStatus;
 }
 
-int UTankAimingComponent::GetRoundsLeft() const {
+int32 UTankAimingComponent::GetRoundsLeft() const {
     return RoundsLeft;
 }
 
