@@ -4,7 +4,7 @@
 #include "TankAimingComponent.h"
 #include <Engine/World.h>
 #include <BattleTank/Public/TankPlayerController.h>
-
+#include "Tank.h"
 
 void ATankPlayerController::BeginPlay() {
     Super::BeginPlay();
@@ -13,6 +13,21 @@ void ATankPlayerController::BeginPlay() {
     if (ensure(TankAimingComponent != nullptr)) {
         FoundAimingComponent(TankAimingComponent);
     }
+}
+
+void ATankPlayerController::SetPawn(APawn *InPawn) {
+    APlayerController::SetPawn(InPawn);
+
+    if (InPawn != nullptr) {
+        auto PossessedTank = Cast<ATank>(InPawn);
+        if (ensure(PossessedTank != nullptr)) {
+            PossessedTank->OnDeath.AddUniqueDynamic(this, &ATankPlayerController::OnTankDeath);
+        }
+    }
+}
+
+void ATankPlayerController::OnTankDeath() {
+    StartSpectatingOnly();
 }
 
 void ATankPlayerController::Tick(float DeltaSeconds) {

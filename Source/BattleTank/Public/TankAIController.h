@@ -12,6 +12,9 @@ UCLASS()
 class BATTLETANK_API ATankAIController : public AAIController {
     GENERATED_BODY()
 
+public:
+    void SetPawn(APawn *InPawn) override;
+
 protected:
     void BeginPlay() override;
 
@@ -23,5 +26,6 @@ private:
 
     UTankAimingComponent *TankAimingComponent{nullptr};
 
-    APawn *PlayerTank{nullptr};
+    UFUNCTION()
+    void OnTankDeath();
 };

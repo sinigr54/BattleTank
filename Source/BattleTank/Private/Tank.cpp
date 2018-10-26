@@ -1,7 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include <BattleTank/Public/Tank.h>
-
 #include "Tank.h"
 #include "Engine/World.h"
 
@@ -11,6 +9,13 @@ ATank::ATank() {
     PrimaryActorTick.bCanEverTick = false;
 }
 
+void ATank::BeginPlay() {
+    AActor::BeginPlay();
+
+    CurrentHealth = DefaultHealth;
+}
+
+
 float ATank::TakeDamage(float Damage, struct FDamageEvent const &DamageEvent, AController *EventInstigator,
                         AActor *DamageCauser) {
 
@@ -19,7 +24,7 @@ float ATank::TakeDamage(float Damage, struct FDamageEvent const &DamageEvent, AC
 
     CurrentHealth -= DamageToApply;
     if (CurrentHealth <= 0) {
-        UE_LOG(LogTemp, Warning, TEXT("%s: Died"), *GetName());
+        OnDeath.Broadcast();
     }
 
     return DamageToApply;

@@ -17,6 +17,8 @@ public:
 
     void AimTowardsCrosshair();
 
+    void SetPawn(APawn *InPawn) override;
+
 protected:
     UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
     void FoundAimingComponent(UTankAimingComponent *AimingComponent);
@@ -40,5 +42,8 @@ private:
     bool GetLookDirection(const FVector2D &ScreenLocation, FVector &LookDirection) const;
 
     bool GetLookVectorHitLocation(const FVector &LookDirection, FVector &HitLocation) const;
+
+    UFUNCTION()
+    void OnTankDeath();
 
 };
