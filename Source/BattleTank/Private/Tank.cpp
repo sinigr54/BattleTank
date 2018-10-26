@@ -1,5 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#include <BattleTank/Public/Tank.h>
+
 #include "Tank.h"
 #include "Engine/World.h"
 
@@ -21,4 +23,8 @@ float ATank::TakeDamage(float Damage, struct FDamageEvent const &DamageEvent, AC
     }
 
     return DamageToApply;
+}
+
+float ATank::GetHealthPercent() const {
+    return static_cast<float>(CurrentHealth) / static_cast<float>(DefaultHealth);
 }
