@@ -1,12 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include <BattleTank/Public/Projectile.h>
-
-#include "BattleTank/Public/Projectile.h"
+#include "Projectile.h"
 #include "Engine/World.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Classes/PhysicsEngine/RadialForceComponent.h"
 #include "Particles/ParticleSystemComponent.h"
+#include "Classes/Kismet/GameplayStatics.h"
+#include "TimerManager.h"
+#include "GameFramework/DamageType.h"
 
 // Sets default values
 AProjectile::AProjectile() {
@@ -14,21 +16,24 @@ AProjectile::AProjectile() {
     PrimaryActorTick.bCanEverTick = static_cast<uint8>(false);
 
     CollisionMesh =
-            CreateDefaultSubobject<UStaticMeshComponent>(FName("CollisionMesh"));
+            CreateDefaultSubobject<UStaticMeshComponent>(FName("Collision Mesh"));
     SetRootComponent(CollisionMesh);
     CollisionMesh->SetNotifyRigidBodyCollision(true);
     CollisionMesh->SetVisibility(false);
 
-    LaunchBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName("LaunchBlast"));
+    LaunchBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName("Launch Blast"));
     LaunchBlast->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 
-    ImpactBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName("ImpactBlast"));
+    ImpactBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName("Impact Blast"));
     ImpactBlast->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
     ImpactBlast->SetAutoActivate(false);
 
     ProjectileMovementComponent =
-            CreateDefaultSubobject<UProjectileMovementComponent>(FName("ProjectileMovementComponent"));
+            CreateDefaultSubobject<UProjectileMovementComponent>(FName("Projectile Movement Component"));
     ProjectileMovementComponent->SetAutoActivate(false);
+
+    ExplosionForce = CreateDefaultSubobject<URadialForceComponent>(FName("Explosion Force"));
+    ExplosionForce->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 }
 
 // Called when the game starts or when spawned
@@ -48,6 +53,26 @@ void AProjectile::LaunchProjectile(float Speed) {
 void AProjectile::OnHit(AActor *SelfActor, AActor *OtherActor, FVector NormalImpulse, const FHitResult &Hit) {
     LaunchBlast->Deactivate();
     ImpactBlast->Activate();
+    ExplosionForce->FireImpulse();
+
+    SetRootComponent(ImpactBlast);
+    CollisionMesh->DestroyComponent();
+
+    UGameplayStatics::ApplyRadialDamage(
+            this,
+            ProjectileDamage,
+            GetActorLocation(),
+            ExplosionForce->Radius,
+            UDamageType::StaticClass(),
+            TArray<AActor *>()
+    );
+
+    FTimerHandle TimerHandle;
+    GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AProjectile::OnTimerExpire, DestroyDelay, false);
+}
+
+void AProjectile::OnTimerExpire() {
+    Destroy();
 }
 
 
