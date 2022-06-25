@@ -10,29 +10,30 @@
  * 
  */
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
-class BATTLETANK_API UTankTrack : public UStaticMeshComponent {
-    GENERATED_BODY()
+class BATTLETANK_API UTankTrack : public UStaticMeshComponent
+{
+	GENERATED_BODY()
 
 public:
-    UFUNCTION(BlueprintCallable, Category = "Input")
-    void SetThrottle(float Throttle);
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	void SetThrottle(float Throttle);
 
-    void BeginPlay() override;
+	void BeginPlay() override;
 
 private:
-    UPROPERTY(EditDefaultsOnly)
-    float TrackMaxDrivingForce{40000000.0f};
+	UPROPERTY(EditDefaultsOnly)
+	float TrackMaxDrivingForce{40000000.0f};
 
-    float CurrentThrottle{0};
+	float CurrentThrottle{0};
 
-    UTankTrack();
+	UTankTrack();
 
-    UFUNCTION()
-    void OnHit(UPrimitiveComponent *HitComponent, AActor *OtherActor, UPrimitiveComponent *OtherComp,
-               FVector NormalImpulse,
-               const FHitResult &Hit);
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	           FVector NormalImpulse,
+	           const FHitResult& Hit);
 
-    void ApplySidewaysForce();
+	void ApplySidewaysForce();
 
-    void DriveTrack();
+	void DriveTrack();
 };

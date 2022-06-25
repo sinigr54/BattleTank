@@ -9,41 +9,41 @@
 class UTankAimingComponent;
 
 UCLASS()
-class BATTLETANK_API ATankPlayerController : public APlayerController {
-    GENERATED_BODY()
+class BATTLETANK_API ATankPlayerController : public APlayerController
+{
+	GENERATED_BODY()
 
 public:
-    void Tick(float DeltaSeconds) override;
+	void Tick(float DeltaSeconds) override;
 
-    void AimTowardsCrosshair();
+	void AimTowardsCrosshair();
 
-    void SetPawn(APawn *InPawn) override;
+	void SetPawn(APawn* InPawn) override;
 
 protected:
-    UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
-    void FoundAimingComponent(UTankAimingComponent *AimingComponent);
+	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
+	void FoundAimingComponent(UTankAimingComponent* AimingComponent);
 
 private:
-    UPROPERTY(EditDefaultsOnly)
-    float CrossHairXLocation{0.5f};
+	UPROPERTY(EditDefaultsOnly)
+	float CrossHairXLocation{0.5f};
 
-    UPROPERTY(EditDefaultsOnly)
-    float CrossHairYLocation{0.33333f};
+	UPROPERTY(EditDefaultsOnly)
+	float CrossHairYLocation{0.33333f};
 
-    UPROPERTY(EditDefaultsOnly)
-    float LineTraceRange{1000000.0f};
+	UPROPERTY(EditDefaultsOnly)
+	float LineTraceRange{1000000.0f};
 
-    UTankAimingComponent *TankAimingComponent{nullptr};
+	UTankAimingComponent* TankAimingComponent{nullptr};
 
-    void BeginPlay() override;
+	void BeginPlay() override;
 
-    bool GetSightRayHitLocation(FVector &HitLocation) const;
+	bool GetSightRayHitLocation(FVector& HitLocation) const;
 
-    bool GetLookDirection(const FVector2D &ScreenLocation, FVector &LookDirection) const;
+	bool GetLookDirection(const FVector2D& ScreenLocation, FVector& LookDirection) const;
 
-    bool GetLookVectorHitLocation(const FVector &LookDirection, FVector &HitLocation) const;
+	bool GetLookVectorHitLocation(const FVector& LookDirection, FVector& HitLocation) const;
 
-    UFUNCTION()
-    void OnTankDeath();
-
+	UFUNCTION()
+	void OnTankDeath();
 };

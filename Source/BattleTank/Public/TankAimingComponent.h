@@ -7,11 +7,12 @@
 #include "TankAimingComponent.generated.h"
 
 UENUM()
-enum class EFiringStatus : uint8 {
-    Reloading,
-    Aiming,
-    Locked,
-    OutOfAmmo
+enum class EFiringStatus : uint8
+{
+	Reloading,
+	Aiming,
+	Locked,
+	OutOfAmmo
 };
 
 class UTankBarrel;
@@ -21,58 +22,60 @@ class UTankTurret;
 class AProjectile;
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
-class BATTLETANK_API UTankAimingComponent : public UActorComponent {
-    GENERATED_BODY()
+class BATTLETANK_API UTankAimingComponent : public UActorComponent
+{
+	GENERATED_BODY()
 
 public:
-    // Sets default values for this component's properties
-    UTankAimingComponent();
+	// Sets default values for this component's properties
+	UTankAimingComponent();
 
-    UFUNCTION(BlueprintCallable, Category = "Setup")
-    void Initialize(UTankBarrel *BarrelToSet, UTankTurret *TurretToSet);
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	void Initialize(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet);
 
-    UFUNCTION(BlueprintCallable, Category = "Firing")
-    void Fire();
+	UFUNCTION(BlueprintCallable, Category = "Firing")
+	void Fire();
 
-    UFUNCTION(BlueprintCallable, Category = "Firing")
-    int32 GetRoundsLeft() const;
+	UFUNCTION(BlueprintCallable, Category = "Firing")
+	int32 GetRoundsLeft() const;
 
-    void AimAt(const FVector &WorldSpaceAim);
+	void AimAt(const FVector& WorldSpaceAim);
 
-    EFiringStatus GetFiringStatus() const;
+	EFiringStatus GetFiringStatus() const;
 
 protected:
-    UPROPERTY(BlueprintReadOnly, Category = "State")
-    EFiringStatus FiringStatus{EFiringStatus::Reloading};
+	UPROPERTY(BlueprintReadOnly, Category = "State")
+	EFiringStatus FiringStatus{EFiringStatus::Reloading};
 
-    void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
+	void TickComponent(float DeltaTime, enum ELevelTick TickType,
+	                   FActorComponentTickFunction* ThisTickFunction) override;
 
-    void BeginPlay() override;
+	void BeginPlay() override;
 
 private:
-    UPROPERTY(EditDefaultsOnly, Category = "Setup")
-    TSubclassOf<AProjectile> ProjectileBlueprint;
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	TSubclassOf<AProjectile> ProjectileBlueprint;
 
-    UPROPERTY(EditDefaultsOnly, Category = "Setup")
-    float LaunchSpeed{8000.0f}; // 4 m / s
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	float LaunchSpeed{8000.0f}; // 4 m / s
 
-    UPROPERTY(EditDefaultsOnly, Category = "Firing")
-    int32 RoundsLeft{25};
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	int32 RoundsLeft{25};
 
-    UPROPERTY(EditDefaultsOnly, Category = "Firing")
-    float ReloadTimeInSeconds{0.1};
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	float ReloadTimeInSeconds{0.1};
 
-    double LastFireTime{0};
+	double LastFireTime{0};
 
-    FVector AimLocation;
+	FVector AimLocation;
 
-    UTankBarrel *Barrel{nullptr};
+	UTankBarrel* Barrel{nullptr};
 
-    UTankTurret *Turret{nullptr};
+	UTankTurret* Turret{nullptr};
 
-    void MoveBarrelTowards(const FVector &AimDirection);
+	void MoveBarrelTowards(const FVector& AimDirection);
 
-    bool IsBarrelMoving() const;
+	bool IsBarrelMoving() const;
 
-    void SetFiringStatusOutOfAmmoIfNeed();
+	void SetFiringStatusOutOfAmmoIfNeed();
 };

@@ -9,27 +9,28 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTankDelegate);
 
 UCLASS()
-class BATTLETANK_API ATank : public APawn {
-    GENERATED_BODY()
+class BATTLETANK_API ATank : public APawn
+{
+	GENERATED_BODY()
 
 public:
-    void BeginPlay() override;
+	void BeginPlay() override;
 
-    float TakeDamage(float Damage, struct FDamageEvent const &DamageEvent, AController *EventInstigator,
-                     AActor *DamageCauser) override;
+	float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator,
+	                 AActor* DamageCauser) override;
 
-    UFUNCTION(BlueprintPure, Category = "Health")
-    float GetHealthPercent() const;
+	UFUNCTION(BlueprintPure, Category = "Health")
+	float GetHealthPercent() const;
 
-    FTankDelegate OnDeath;
+	FTankDelegate OnDeath;
 
 private:
-    // Sets default values for this pawn's properties
-    ATank();
+	// Sets default values for this pawn's properties
+	ATank();
 
-    UPROPERTY(EditDefaultsOnly, Category = "Setup")
-    int32 DefaultHealth{100};
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	int32 DefaultHealth{100};
 
-    UPROPERTY(VisibleAnywhere, Category = "Health")
-    int32 CurrentHealth;
+	UPROPERTY(VisibleAnywhere, Category = "Health")
+	int32 CurrentHealth;
 };

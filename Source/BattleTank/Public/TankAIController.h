@@ -9,23 +9,24 @@
 class UTankAimingComponent;
 
 UCLASS()
-class BATTLETANK_API ATankAIController : public AAIController {
-    GENERATED_BODY()
+class BATTLETANK_API ATankAIController : public AAIController
+{
+	GENERATED_BODY()
 
 public:
-    void SetPawn(APawn *InPawn) override;
+	void SetPawn(APawn* InPawn) override;
 
 protected:
-    void BeginPlay() override;
+	void BeginPlay() override;
 
-    void Tick(float DeltaTime) override;
+	void Tick(float DeltaTime) override;
 
 private:
-    UPROPERTY(EditDefaultsOnly, Category = "Setup")
-    float AcceptanceRadius = 8000;
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	float AcceptanceRadius = 8000;
 
-    UTankAimingComponent *TankAimingComponent{nullptr};
+	UTankAimingComponent* TankAimingComponent{nullptr};
 
-    UFUNCTION()
-    void OnTankDeath();
+	UFUNCTION()
+	void OnTankDeath();
 };
